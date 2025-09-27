@@ -1,16 +1,20 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  build:
+  docker-build-push:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Debug secrets
-        run: |
-          echo "Username: '${{ secrets.DOCKERHUB_USERNAME }}'"
-          TOKEN="${{ secrets.DOCKERHUB_TOKEN }}"
-          echo "Token is empty? -> $([ -z "$TOKEN" ] && echo yes || echo no)"
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
@@ -18,5 +22,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # continue with your Docker build, push, etc.
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: jagan814/wisecow-app:latest
 
