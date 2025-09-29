@@ -17,6 +17,3 @@ nodes:
     extraMounts:
       - hostPath: /etc/hosts
         containerPath: /etc/hosts
-    # Add CPU/memory resources (optional but helpful)
-    image: kindest/node:v1.29.2
-
