@@ -31,12 +31,10 @@ jobs:
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/wisecow:latest
 
     # ✅ Continuous Deployment Step
-    - name: Set up kubeconfig
-      run: |
-        mkdir -p $HOME/.kube
-        echo "${{ secrets.KUBECONFIG_CONTENT }}" | base64 -d > $HOME/.kube/config
-
-
+    - name: Set up Kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_B64 }}" | base64 -d > ~/.kube/config
     - name: Deploy to Kubernetes
       run: |
         kubectl apply -f k8s/deployment.yaml
