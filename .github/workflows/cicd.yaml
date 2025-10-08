@@ -30,7 +30,7 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/wisecow:latest
 
-    # ✅ Continuous Deployment Step
+    #  Continuous Deployment
     - name: Set up Kubeconfig
       run: |
           mkdir -p ~/.kube
