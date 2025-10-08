@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, ubuntu-latest]
 
     steps:
     - name: Checkout code
@@ -31,10 +31,13 @@ jobs:
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/wisecow:latest
 
     #  Continuous Deployment
-    - name: Set up Kubeconfig
+    - name: Set up kubeconfig for Kind
       run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG_B64 }}" | base64 -d > ~/.kube/config
+        mkdir -p ~/.kube
+        kind get kubeconfig > ~/.kube/config
+        export KUBECONFIG=~/.kube/config
+        kubectl cluster-info
+
     - name: Deploy to Kubernetes
       run: |
         kubectl apply -f k8s/deployment.yaml
